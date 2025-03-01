@@ -1,11 +1,19 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
+
+export interface IQuestion extends Document {
+    correctCity: string;
+    clues: string[];
+    options: string[];
+    fun_fact: string[];
+    trivia: string[];
+}
 
 const QuestionSchema = new mongoose.Schema({
-    questionId: { type: String, required: true, unique: true },
-    question: { type: String, required: true },
-    answer: { type: String, required: true },
-    questionGenerationTimestamp: { type: Date, default: Date.now },
-    questionAnsweredTimestamp: { type: Date },
-}, { timestamps: true });
+    correctCity: { type: String, required: true },
+    clues: [{ type: String }],
+    options: [{ type: String }],
+    fun_fact: [{ type: String }],
+    trivia: [{ type: String }]
+});
 
-export default mongoose.model("Question", QuestionSchema);
+export default mongoose.model<IQuestion>("Question", QuestionSchema);

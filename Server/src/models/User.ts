@@ -1,13 +1,20 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
+
+interface IUser extends Document {
+    userName: string;
+    gameHistory: mongoose.Types.ObjectId[];
+}
 
 const UserSchema = new mongoose.Schema({
-    userId: { type: String, required: true, unique: true },
-    userName: { type: String, required: true },
-    gameHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Game" }],
-    userStats: {
-        gamePlayed: { type: Number, default: 0 },
-        maxScore: { type: Number, default: 0 },
+    userName: {
+        type: String,
+        required: true,
+        unique: true,
     },
-}, { timestamps: true });
+    gameHistory: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Game'
+    }]
+});
 
-export default mongoose.model("User", UserSchema);
+export default mongoose.model<IUser>("User", UserSchema);
