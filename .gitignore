@@ -3,3 +3,12 @@ node_modules/
 
 # Ignore environment variables file
 .env
+
+# ignore build folder
+build/
+
+# ignore dist folder
+dist/
+
+# ignore package-lock.json
+package-lock.json
