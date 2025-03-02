@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Question, ValidateResponse } from "../types/game";
 
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = "https://globrotter-backend-mdqp0lhkj-prabhxs-projects.vercel.app";
 
 export const createUser = async (userName: string): Promise<string> => {
     const response = await axios.post<{ userId: string }>(`${API_BASE_URL}/users`, { userName });
@@ -11,7 +11,7 @@ export const createUser = async (userName: string): Promise<string> => {
 export const getUserById = async (userId: string) => {
     return await axios.get(`${API_BASE_URL}/users/${userId}`);
 };
-    
+
 export const getGameById = async (gameId: string) => {
     return await axios.get(`${API_BASE_URL}/games/${gameId}`);
 };
