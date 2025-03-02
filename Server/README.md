@@ -1,4 +1,4 @@
-# GlobeTrotter - Geography Learning Game API
+# GlobeTrotter - Geography Learning Game API 🌍
 
 GlobeTrotter is an interactive geography learning game that challenges users to identify cities around the world through clues, fun facts, and trivia. This folder contains the backend API built with Node.js, Express, and TypeScript.
 
@@ -21,7 +21,7 @@ GlobeTrotter is an interactive geography learning game that challenges users to 
 - **Deployment**: Vercel
 - **Version Control**: Git
 
-## 📁 Project Structure
+## 📁 Directory Structure
 
 ```
 src/
@@ -125,20 +125,13 @@ Each question includes:
 
 ## 🔧 Setup & Installation
 
-1. **Clone the repository**
-
-```
-git clone <repository-url>
-cd globetrotter-backend
-```
-
-2. **Install dependencies**
+1. **Install dependencies**
 
 ```
 npm install
 ```
 
-3. **Environment Setup**
+2. **Environment Setup**
    Create a `.env` file with:
 
 ```
@@ -148,37 +141,18 @@ GEMINI_API_KEY=your_gemini_api_key
 GEMINI_API_URL=your_gemini_api_endpoint
 ```
 
-4. **Development Mode**
+3. **Development Mode**
 
 ```
 npm run dev
 ```
 
-5. **Production Build**
+4. **Production Build**
 
 ```
 npm run build
 ```
 
-## 🌐 Deployment
+## Author
 
-This project is configured for deployment on Vercel:
-
-1. **Install Vercel CLI**
-
-```
-npm install -g vercel
-```
-
-2. **Deploy**
-
-```
-vercel
-```
-
-3. **Environment Variables**
-   Set up the following in Vercel dashboard:
-
-- `MONGO_URI`
-- `GEMINI_API_KEY`
-- `GEMINI_API_URL`
+Prabhjot Singh

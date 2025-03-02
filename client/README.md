@@ -1,4 +1,4 @@
-# GlobeTrotter 🌍
+# GlobeTrotter - Geography Learning Game 🌍
 
 GlobeTrotter is an interactive web game that tests your knowledge of cities worldwide through engaging trivia and fun facts.
 
@@ -6,28 +6,45 @@ GlobeTrotter is an interactive web game that tests your knowledge of cities worl
 
 A React-based web application that presents users with city-related questions and facts. Players earn points by correctly identifying cities, with options to use hints and challenge friends.
 
-## Tech Stack
+## 🌟 Features
+
+**Game Mechanics:**
+
+- Multiple choice city questions
+- Point system (+4 correct, -2 incorrect)
+- Hint system (-1 point penalty)
+- Progress tracking
+- Social sharing capabilities
+
+**UI Elements:**
+
+- Loading states
+- Interactive feedback
+- Score tracking
+- Friend challenge system
+
+## 🛠️ Tech Stack
 
 **Frontend:**
 
-- React 
+- React
 - TypeScript
 - Tailwind CSS
-- React Router 
+- React Router
 - React Icons
-- React Confetti 
-- HTML2Canvas 
+- React Confetti
+- HTML2Canvas
 
 **State Management:**
 
 - React Hooks
-- React Cookie 
+- React Cookie
 
 **API Integration:**
 
-- Axios 
+- Axios
 
-## Directory Structure
+## 📁 Directory Structure
 
 ```
 src/
@@ -47,24 +64,7 @@ src/
 └── styles/               # Global styles
 ```
 
-## Features
-
-**Game Mechanics:**
-
-- Multiple choice city questions
-- Point system (+4 correct, -2 incorrect)
-- Hint system (-1 point penalty)
-- Progress tracking
-- Social sharing capabilities
-
-**UI Elements:**
-
-- Loading states
-- Interactive feedback
-- Score tracking
-- Friend challenge system
-
-## Setup Instructions
+## 🔧 Setup & Installation
 
 1. Install dependencies:
 
