@@ -7,27 +7,18 @@ import cors from "cors";
 
 const app = express();
 
+// Connect to MongoDB
+connectDB().catch(console.error);
+
+// CORS configuration
 app.use(cors({
-    origin: [
-        "http://localhost:3000",
-        "https://globetrotter-git-master-prabhxs-projects.vercel.app",
-        "https://globetrotter.vercel.app"
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: [
-        "Content-Type",
-        "Authorization",
-        "Origin",
-        "X-Requested-With",
-        "Accept",
-        "Access-Control-Allow-Headers"
-    ],
-    credentials: true,
-    maxAge: 86400
+    origin: '*',  // Allow all origins
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: false
 }));
 
-app.options('*', cors());
-
+// Body parser
 app.use(express.json());
 
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -60,6 +51,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use("/users", userRoutes);
 app.use("/games", gameRoutes);
 app.use("/questions", questionRoutes);
+
+app.use("/test", (req: Request, res: Response) => {
+    res.json({ message: "Backend is hosted successfully on Vercel" });
+});
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
