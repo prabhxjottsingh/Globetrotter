@@ -3,6 +3,12 @@ import User from "../models/User";
 
 export const createUser = async (req: Request, res: Response): Promise<void> => {
     try {
+        const existingUser = await User.findOne({ userName: req.body.userName });
+        if (existingUser) {
+            res.status(400).json({ error: "User with same name already exists, please choose another name" });
+            return;
+        }
+
         const newUser = new User(req.body);
         await newUser.save();
         res.status(201).json({ userId: newUser._id });
