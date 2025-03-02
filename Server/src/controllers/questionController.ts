@@ -2,6 +2,14 @@ import { Request, Response } from "express";
 import Question, { IQuestion } from "../models/Question";
 import Game from "../models/Game";
 import mongoose from "mongoose";
+import axios from "axios";
+import { getQuestionPrompt, cityData } from "../public/prompt";
+import dotenv from "dotenv";
+import { extractJsonString } from "../../utils/utilities";
+
+dotenv.config();
+const API_KEY = process.env.GEMINI_API_KEY;
+const API_URL = process.env.GEMINI_API_URL + `?key=${API_KEY}`;
 
 export const getQuestionById = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -31,46 +39,71 @@ export const getRandomQuestion = async (req: Request, res: Response): Promise<vo
             res.status(404).json({ message: "Game not found" });
             return;
         }
+        let newQuestion: IQuestion | null = null;
+        try {
+            const prompt = getQuestionPrompt();
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }]
+                })
+            });
 
-        const newQuestion = new Question({
-            correctCity: "Paris",
-            clues: [
-                "This city is home to a famous tower that sparkles every night.",
-                "Known as the 'City of Love' and a hub for fashion and art.",
-            ],
-            fun_fact: [
-                "The Eiffel Tower was supposed to be dismantled after 20 years but was saved because it was useful for radio transmissions!",
-                "Paris has only one stop sign in the entire city—most intersections rely on priority-to-the-right rules.",
-            ],
-            trivia: [
-                "This city is famous for its croissants and macarons. Bon appétit!",
-                "Paris was originally a Roman city called Lutetia.",
-            ],
-            options: ["Paris", "London", "Rome", "Madrid"]
-        }) as IQuestion;
-        await newQuestion.save();
+            const data = await response.json();
+            const generatedQuestion = JSON.parse(extractJsonString(data.candidates[0].content.parts[0].text));
 
-        await Game.findByIdAndUpdate(
-            gameId,
-            {
-                $push: {
-                    questionAnswerHistory: {
-                        questionId: newQuestion._id,
-                        wasCorrect: false
+            newQuestion = new Question({
+                correctCity: generatedQuestion.correct_city,
+                clues: generatedQuestion.clues,
+                fun_fact: generatedQuestion.fun_fact,
+                trivia: generatedQuestion.trivia,
+                options: generatedQuestion.options
+            }) as IQuestion;
+        } catch (error) {
+            const randomQuestion = await Question.aggregate([{ $sample: { size: 1 } }]);
+
+            if (randomQuestion.length > 0) {
+                const randomQuestionData = randomQuestion[0];
+                newQuestion = new Question({
+                    correctCity: randomQuestionData.correctCity,
+                    clues: randomQuestionData.clues,
+                    fun_fact: randomQuestionData.fun_fact,
+                    trivia: randomQuestionData.trivia,
+                    options: randomQuestionData.options
+                }) as IQuestion;
+            } else {
+                res.status(500).json({ error: "No questions available" });
+                return;
+            }
+        }
+        if (newQuestion) {
+            await newQuestion.save();
+
+            await Game.findByIdAndUpdate(
+                gameId,
+                {
+                    $push: {
+                        questionAnswerHistory: {
+                            questionId: newQuestion._id,
+                            wasCorrect: false
+                        }
                     }
-                }
-            },
-            { new: true }
-        );
+                },
+                { new: true }
+            );
 
-        const formattedQuestion = {
-            id: newQuestion._id,
-            clues: newQuestion.clues,
-            fun_fact: newQuestion.fun_fact,
-            trivia: newQuestion.trivia,
-            options: newQuestion.options
-        };
-        res.status(200).json(formattedQuestion);
+            const formattedQuestion = {
+                id: newQuestion._id,
+                clues: newQuestion.clues,
+                fun_fact: newQuestion.fun_fact,
+                trivia: newQuestion.trivia,
+                options: newQuestion.options
+            };
+            res.status(200).json(formattedQuestion);
+            return;
+        }
+        res.status(500).json({ error: "Failed to generate question" });
     } catch (error) {
         console.error("Error generating question:", error);
         res.status(500).json({ error: "Failed to generate question" });

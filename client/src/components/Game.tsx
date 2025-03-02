@@ -11,6 +11,7 @@ import { useCookies } from "react-cookie";
 import { FaSmileBeam, FaRegSadTear, FaArrowLeft } from "react-icons/fa";
 import FactSlider from "./FactSlider";
 import html2canvas from "html2canvas";
+import Toast from "./Toast";
 
 interface GameProps {
   gameId: string;
@@ -51,17 +52,25 @@ const Game: React.FC<GameProps> = ({ gameId }) => {
     gameOver: false,
   });
   const [isSharing, setIsSharing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   useEffect(() => {
     fetchNewQuestion();
   }, []);
 
   const fetchNewQuestion = async () => {
+    setIsLoading(true);
     try {
       const question = await getNewQuestion(gameId);
       setGameState((prev) => ({ ...prev, currentQuestion: question }));
     } catch (error) {
       console.error("Error fetching question:", error);
+      setToastMessage("Failed to load question. Please try again.");
+      setShowToast(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -234,6 +243,13 @@ const Game: React.FC<GameProps> = ({ gameId }) => {
 
   return (
     <div className="gradient-bg min-h-screen p-4 relative">
+      {showToast && (
+        <Toast
+          message={toastMessage}
+          type="error"
+          onClose={() => setShowToast(false)}
+        />
+      )}
       {showConfetti && <ReactConfetti recycle={false} />}
       <div className="max-w-4xl mx-auto">
         <div className="card card-hover">
@@ -245,7 +261,14 @@ const Game: React.FC<GameProps> = ({ gameId }) => {
             Score: {gameState.score}
           </p>
 
-          {gameState.currentQuestion && (
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-12">
+              <div className="w-16 h-16 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+              <p className="mt-4 text-gray-600">
+                Loading your next challenge...
+              </p>
+            </div>
+          ) : gameState.currentQuestion ? (
             <div className="space-y-6">
               <div className="bg-gray-50 rounded-2xl p-6 shadow-inner-lg">
                 <p className="text-xl mb-4">
@@ -278,6 +301,13 @@ const Game: React.FC<GameProps> = ({ gameId }) => {
                   </button>
                 ))}
               </div>
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-600">
+              <p>No question available. Please try again.</p>
+              <button onClick={fetchNewQuestion} className="btn-primary mt-4">
+                Retry
+              </button>
             </div>
           )}
 
