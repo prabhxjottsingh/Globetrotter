@@ -7,18 +7,15 @@ import cors from "cors";
 
 const app = express();
 
-// Connect to MongoDB
 connectDB().catch(console.error);
 
-// CORS configuration
 app.use(cors({
-    origin: '*',  // Allow all origins
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: false
 }));
 
-// Body parser
 app.use(express.json());
 
 app.use((req: Request, res: Response, next: NextFunction) => {

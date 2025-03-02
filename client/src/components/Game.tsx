@@ -134,7 +134,6 @@ const Game: React.FC<GameProps> = ({ gameId }) => {
       const shareImage = await generateShareImage(gameState.score);
       const challengeUrl = `${window.location.origin}/challengefriend?score=${gameState.score}&name=${cookies.userName}`;
 
-      // Create share data
       const shareData = {
         title: "GlobeTrotter Challenge",
         text: `Can you beat my score of ${gameState.score} points in GlobeTrotter? Try now!`,

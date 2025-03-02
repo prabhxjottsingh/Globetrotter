@@ -52,11 +52,13 @@ npm install
 
 ```bash
 # Server (.env)
+PORT=8080
 MONGO_URI=your_mongodb_uri
 GEMINI_API_KEY=your_gemini_api_key
+GEMINI_API_URL=your_gemini_model_api_endpoint
 
-# Client (.env)
-REACT_APP_API_URL=your_backend_url
+# Client (src/services/api.ts) 
+API_BASE_URL=your_backend_url #currently set to vercel url
 ```
 
 4. **Run the application**

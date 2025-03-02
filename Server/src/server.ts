@@ -4,7 +4,6 @@ import connectDB from "./config/db";
 
 dotenv.config();
 
-// Only start the server if we're running directly (not through Vercel)
 if (process.env.NODE_ENV !== 'production') {
     const PORT = process.env.PORT || 8080;
     app.listen(PORT, async () => {
