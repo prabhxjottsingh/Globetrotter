@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import axios from "axios";
 import { getQuestionPrompt, cityData } from "../public/prompt";
 import dotenv from "dotenv";
-import { extractJsonString } from "../../utils/utilities";
+import { extractJsonString, shuffleArray } from "../utils/utilities";
 
 dotenv.config();
 const API_KEY = process.env.GEMINI_API_KEY;
@@ -58,7 +58,7 @@ export const getRandomQuestion = async (req: Request, res: Response): Promise<vo
                 clues: generatedQuestion.clues,
                 fun_fact: generatedQuestion.fun_fact,
                 trivia: generatedQuestion.trivia,
-                options: generatedQuestion.options
+                options: shuffleArray(generatedQuestion.options)
             }) as IQuestion;
         } catch (error) {
             const randomQuestion = await Question.aggregate([{ $sample: { size: 1 } }]);
