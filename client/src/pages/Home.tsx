@@ -10,6 +10,7 @@ const Home: React.FC = () => {
   const [showNameInput, setShowNameInput] = useState(false);
   const [cookies] = useCookies(["userId", "userName"]);
   const [error, setError] = useState<string | null>(null);
+  const [startGameButtonClicked, setStartGameButtonClicked] = useState(false);
 
   useEffect(() => {
     if (!cookies.userId) {
@@ -19,11 +20,14 @@ const Home: React.FC = () => {
 
   const handleStartGame = async () => {
     try {
+      setStartGameButtonClicked(true);
       const gameId = await createNewGame(cookies.userId);
-      navigate(`/play/${gameId}`);
+      //   navigate(`/play/${gameId}`);
     } catch (error) {
       setError("Error starting game");
       setTimeout(() => setError(null), 3000);
+    } finally {
+      setStartGameButtonClicked(false);
     }
   };
 
@@ -51,13 +55,16 @@ const Home: React.FC = () => {
 
             <button
               onClick={handleStartGame}
-              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 
+              className={`inline-flex items-center justify-center px-6 sm:px-8 py-3 
                 text-lg font-semibold text-white bg-blue-600 rounded-lg shadow-md 
                 hover:bg-blue-700 transform transition-all duration-300 
                 hover:shadow-lg hover:-translate-y-0.5 
-                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
+                ${
+                  startGameButtonClicked ? "bg-gray-400 hover:bg-gray-400" : ""
+                }`}
             >
-              Start Game
+              {startGameButtonClicked ? "Starting Game..." : "Start Game"}
             </button>
 
             {error && (

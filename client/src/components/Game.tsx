@@ -271,11 +271,11 @@ const Game: React.FC<GameProps> = ({ gameId }) => {
             <div className="space-y-6">
               <div className="bg-gray-50 rounded-2xl p-6 shadow-inner-lg">
                 <p className="text-xl mb-4">
-                  {gameState.currentQuestion.fun_fact[0]}
+                  {gameState.currentQuestion.clues[0]}
                 </p>
                 {showHint && (
                   <p className="text-gray-600 italic bg-primary-50 p-4 rounded-lg border border-primary-100">
-                    Hint: {gameState.currentQuestion.fun_fact[1]}
+                    Hint: {gameState.currentQuestion.clues[1]}
                   </p>
                 )}
               </div>
