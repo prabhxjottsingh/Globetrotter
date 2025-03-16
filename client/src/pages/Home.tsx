@@ -22,7 +22,7 @@ const Home: React.FC = () => {
     try {
       setStartGameButtonClicked(true);
       const gameId = await createNewGame(cookies.userId);
-      //   navigate(`/play/${gameId}`);
+      navigate(`/play/${gameId}`);
     } catch (error) {
       setError("Error starting game");
       setTimeout(() => setError(null), 3000);
